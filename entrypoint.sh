@@ -62,13 +62,14 @@ handle_git_jwt() {
     # capture IAT time
     iat=$( echo "$payload" | jq .iat )
 
+	echo "$iat"
     # Check if IAT less than or equal to server epoch
-    if (( "$iat" <= "$EPOCHSECONDS" )); then
+    if (( $iat <= "$EPOCHSECONDS" )); then
 
         echo "::debug No delta between iat [$iat] and epoch [$EPOCHSECONDS]"
 
     # check if IAT greater than server epoch, if so, calculate delta and sleep before returning
-    elif (( "$iat" > "$EPOCHSECONDS" )); then
+    elif (( $iat > "$EPOCHSECONDS" )); then
 
         delta=$(( "$iat" - "$EPOCHSECONDS" ))
         echo "::debug delta found: iat [$iat] // epoch [$EPOCHSECONDS]; sleeping for $delta seconds"
